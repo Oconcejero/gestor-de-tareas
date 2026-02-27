@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'tareas/register.css' %}">
+
+<h1>Crear cuenta</h1>
+
+<form class="form_register" method="post">
+  {% csrf_token %}
+
+  <div class="campo">
+    <label>Nombre de usuario</label>
+    {{ form.username }}
+  </div>
+
+  <div class="campo">
+    <label>Contraseña</label>
+    {{ form.password1 }}
+  </div>
+
+  <div class="campo">
+    <label>Repite la contraseña</label>
+    {{ form.password2 }}
+  </div>
+
+  <button type="submit">Registrarme</button>
+</form>
+{% endblock %}

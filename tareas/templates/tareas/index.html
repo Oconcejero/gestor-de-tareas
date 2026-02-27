@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'tareas/index.css' %}">
+
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+  <div class="top-bar">
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn-secondary">Cerrar sesión</button>
+    </form>
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar-form">
+      <h1 class="Titulo">Nueva Tarea</h1>
+      <form method="post" class="form-container">
+        {% csrf_token %}
+        <div class="campo">
+          <label>Título</label>
+          {{ form.title }}
+        </div>
+        <div class="campo">
+          <label>Usuario</label>
+          {{ form.user }}
+        </div>
+        <div class="campo">
+          <label>Fecha límite</label>
+          {{ form.dateLimit }}
+        </div>
+        <div class="campo">
+          <label>Descripción</label>
+          {{ form.description }}
+        </div>
+        <div class="campo campo-checkbox">
+          <label>{{ form.completed }} Completada</label>
+        </div>
+        <button type="submit" class="btn-primary">Agregar Tarea</button>
+      </form>
+      {% if mensaje %}<p class="msg">{{ mensaje }}</p>{% endif %}
+    </aside>
+
+    <section class="tasks-section">
+      <h2 class="Subtitulo">Mis Tareas Pendientes</h2>
+
+      <div class="lista-tareas-grid">
+
+        {% for tarea in tareas %}
+
+        <article class="tarea-card {% if tarea.completed %}tarea-ready{% endif %}">
+          <div class="tarea-header">
+            <span class="tarea-titulo">{{ tarea.title }}</span>
+            <span class="tarea-usuario">@{{ tarea.user }}</span>
+          </div>
+
+          <p class="tarea-descripcion">{{ tarea.description }}</p>
+
+          <div class="tarea-footer">
+            <span class="tarea-limite">{{ tarea.dateLimit }}</span>
+
+            <div class="tarea-acciones">
+
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="tarea_id" value="{{ tarea.id }}">
+                <label>
+                {% if tarea.completed %} Completada {% else %} Completar tarea {% endif %}
+                <input type="checkbox" name="completed" onchange="this.form.submit()" {% if tarea.completed %}checked="checked" {% endif %}>
+                </label>
+
+
+              </form>
+
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="tarea_id" value="{{ tarea.id }}">
+                <button type="submit" name="eliminar" class="btn-icon">🗑️</button>
+              </form>
+
+            </div>
+          </div>
+        </article>
+
+        {% empty %}
+
+        <p class="sin-tareas">No hay tareas disponibles.</p>
+
+        {% endfor %}
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+{% endblock %}
