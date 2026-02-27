@@ -1,0 +1,17 @@
+#Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+ent/
+venv/
+ENV/
+# Django
+db.squlite3
+local_settings.py
+staticfiles/
+media/
+# Entorno y Secretos
+.env
+# Render / SO
+.DS_Store
